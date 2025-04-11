@@ -5,6 +5,12 @@ using Company.Infrastructure.Services;
 using Company.Persistence;
 using Company.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using Company.Application.DTOs.DepartmentDTO;
+using Company.Application.Validator;
+using Company.Application.DTOs.EmployeeDTO;
+using Company.Application.DTOs.SalaryDTO;
 
 namespace EFCoreAssignment
 {
@@ -17,6 +23,9 @@ namespace EFCoreAssignment
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddFluentValidationAutoValidation();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -39,6 +48,14 @@ namespace EFCoreAssignment
             builder.Services.AddScoped(typeof(IServiceBase<,,>), typeof(ServiceBase<,,>));
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<IProjectService, ProjectService>();
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<ISalaryService, SalaryService>();
+            builder.Services.AddScoped<IProjectEmployeeService, ProjectEmployeeService>();
+
+            // Register FluentValidation
+            builder.Services.AddScoped<IValidator<DepartmentRequestDTO>, DepartmentDTOValidator>();
+            builder.Services.AddScoped<IValidator<EmployeeRequestDTO>, EmployeeDTOValidator>();
+            builder.Services.AddScoped<IValidator<SalaryRequestDTO>, SalaryDTOValidator>();
 
             var app = builder.Build();
 

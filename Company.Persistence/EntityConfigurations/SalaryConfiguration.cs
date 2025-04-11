@@ -21,7 +21,7 @@ public class SalaryConfiguration : IEntityTypeConfiguration<Salary>
         builder
             .HasOne(s => s.Employee)
             .WithOne(e => e.Salary)
-            .HasForeignKey<Employee>(e => e.Id)
+            .HasForeignKey<Salary>(s => s.EmployeeId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.ToTable("Salary");

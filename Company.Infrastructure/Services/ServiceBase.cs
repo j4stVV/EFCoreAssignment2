@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using Company.Application.Abstractions.Services;
 using Company.Application.DTOs.DepartmentDTO;
 using Company.Domain.Repositories;
@@ -29,21 +30,27 @@ public class ServiceBase<TEntity, TResponseDTO, TRequestDTO> : IServiceBase
         return _mapper.Map<TResponseDTO>(entity);
     }
 
-    public async Task<TResponseDTO> CreateAsync(TRequestDTO entityRequest)
+    public virtual async Task<TResponseDTO> CreateAsync(TRequestDTO entityRequest)
     {
         var entity = _mapper.Map<TEntity>(entityRequest);
-        entity.GetType().GetProperty("Id")?.SetValue(entity, Guid.NewGuid());
+        var idProperty = typeof(TEntity).GetProperty("Id");
+
+        if (idProperty != null && idProperty.CanWrite)
+        {
+            var idValue = Guid.NewGuid();
+            idProperty.SetValue(entity, idValue);
+        }
         await _repository.AddAsync(entity);
         await _repository.SaveChangesAsync();
         return _mapper.Map<TResponseDTO>(entity);
     }
 
-    public async Task UpdateAsync(Guid id, TRequestDTO entityRequest)
+    public virtual async Task UpdateAsync(Guid id, TRequestDTO entityRequest)
     {
         var entity = await _repository.GetByIdAsync(id);
         if (entity == null)
         {
-            throw new KeyNotFoundException($"Department with ID {id} not found.");
+            throw new KeyNotFoundException($"{typeof(TEntity).Name} with ID {id} not found.");
         }
 
         _mapper.Map(entityRequest, entity);
@@ -51,15 +58,15 @@ public class ServiceBase<TEntity, TResponseDTO, TRequestDTO> : IServiceBase
         await _repository.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
     {
         var entity = await _repository.GetByIdAsync(id);
         if (entity == null)
         {
-            throw new KeyNotFoundException($"Department with ID {id} not found.");
+            throw new KeyNotFoundException($"{typeof(TEntity).Name} with ID {id} not found.");
         }
 
-        await _repository.DeleteAsync(id);
+        await _repository.DeleteAsync(entity);
         await _repository.SaveChangesAsync();
     }
 }

@@ -31,13 +31,9 @@ public class Repository<T> : IRepository<T> where T : class
         await _entities.AddAsync(entity);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(T entity)
     {
-        var entity = await _entities.FindAsync(id);
-        if (entity != null)
-        {
-            _entities.Remove(entity);
-        }
+        _entities.Remove(entity);
     }
 
     public void Update(T entity)

@@ -15,11 +15,11 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
             .IsRequired()
             .HasMaxLength(100);
 
-        builder
+        /*builder
             .HasMany(d => d.Employees)
             .WithOne(e => e.Department)
             .HasForeignKey(e => e.DepartmentId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade);*/
 
         builder.ToTable("Department");
 

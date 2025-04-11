@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Company.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250409080923_InitialDatabase")]
-    partial class InitialDatabase
+    [Migration("20250411124827_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,6 +66,7 @@ namespace Company.Persistence.Migrations
             modelBuilder.Entity("Company.Domain.Entities.Employee", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("DepartmentId")
@@ -136,6 +137,9 @@ namespace Company.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
                     b.ToTable("Salary", (string)null);
                 });
 
@@ -144,18 +148,10 @@ namespace Company.Persistence.Migrations
                     b.HasOne("Company.Domain.Entities.Department", "Department")
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Company.Domain.Entities.Salary", "Salary")
-                        .WithOne("Employee")
-                        .HasForeignKey("Company.Domain.Entities.Employee", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Department");
-
-                    b.Navigation("Salary");
                 });
 
             modelBuilder.Entity("Company.Domain.Entities.ProjectEmployee", b =>
@@ -177,6 +173,17 @@ namespace Company.Persistence.Migrations
                     b.Navigation("Project");
                 });
 
+            modelBuilder.Entity("Company.Domain.Entities.Salary", b =>
+                {
+                    b.HasOne("Company.Domain.Entities.Employee", "Employee")
+                        .WithOne("Salary")
+                        .HasForeignKey("Company.Domain.Entities.Salary", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("Company.Domain.Entities.Department", b =>
                 {
                     b.Navigation("Employees");
@@ -185,17 +192,14 @@ namespace Company.Persistence.Migrations
             modelBuilder.Entity("Company.Domain.Entities.Employee", b =>
                 {
                     b.Navigation("ProjectEmployees");
+
+                    b.Navigation("Salary")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Company.Domain.Entities.Project", b =>
                 {
                     b.Navigation("ProjectEmployees");
-                });
-
-            modelBuilder.Entity("Company.Domain.Entities.Salary", b =>
-                {
-                    b.Navigation("Employee")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

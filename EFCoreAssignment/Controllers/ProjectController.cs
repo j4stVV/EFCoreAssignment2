@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using Company.Application.Abstractions.Services;
-using Company.Application.DTOs.DepartmentDTO;
 using Company.Application.DTOs.ProjectDTO;
-using Company.Domain.Entities;
-using Company.Domain.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EFCoreAssignment.Controllers;

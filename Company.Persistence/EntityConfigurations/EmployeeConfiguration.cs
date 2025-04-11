@@ -26,12 +26,12 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             .HasOne(e => e.Department)
             .WithMany(d => d.Employees)
             .HasForeignKey(e => e.DepartmentId)
-            .OnDelete(DeleteBehavior.Restrict);
-        builder
+            .OnDelete(DeleteBehavior.Cascade);
+        /*builder
             .HasOne(e => e.Salary)
             .WithOne(s => s.Employee)
             .HasForeignKey<Salary>(s => s.EmployeeId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade);*/
         builder
             .HasMany(e => e.ProjectEmployees)
             .WithOne(pe => pe.Employee)

@@ -9,5 +9,4 @@ public class Employee : Entity
     public Department Department { get; set; }
     public Salary Salary { get; set; }
     public ICollection<ProjectEmployee> ProjectEmployees { get; set; }
-
 }

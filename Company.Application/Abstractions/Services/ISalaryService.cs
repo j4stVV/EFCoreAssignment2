@@ -1,12 +1,8 @@
-﻿using Company.Application.DTOs;
+﻿using Company.Application.DTOs.SalaryDTO;
+using Company.Domain.Entities;
 
 namespace Company.Application.Abstractions.Services;
 
-public interface ISalaryService
+public interface ISalaryService : IServiceBase<Salary, SalaryResponseDTO, SalaryRequestDTO>
 {
-    Task<IEnumerable<SalaryDTO>> GetAllAsync();
-    Task<SalaryDTO> GetByIdAsync(Guid id);
-    Task<SalaryDTO> CreateAsync(SalaryDTO salary);
-    Task UpdateAsync(Guid id, SalaryDTO salary);
-    Task DeleteAsync(Guid id);
 }

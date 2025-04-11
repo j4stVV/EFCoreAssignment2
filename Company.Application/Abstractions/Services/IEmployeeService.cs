@@ -1,12 +1,11 @@
 ﻿using Company.Application.DTOs.EmployeeDTO;
+using Company.Domain.Entities;
 
 namespace Company.Application.Abstractions.Services;
 
-public interface IEmployeeService 
+public interface IEmployeeService : IServiceBase<Employee, EmployeeResponseDTO, EmployeeRequestDTO>
 {
-    Task<IEnumerable<EmployeeResponseDTO>> GetAllAsync();
-    Task<EmployeeResponseDTO> GetByIdAsync(Guid id);
-    Task<EmployeeResponseDTO> CreateAsync(EmployeeResponseDTO employee);
-    Task UpdateAsync(Guid id, EmployeeResponseDTO employee);
-    Task DeleteAsync(Guid id);
+    Task<IEnumerable<EmployeeWithDepartmentResponseDTO>> GetAllWithDepartmentAsync();
+    Task<IEnumerable<EmployeeWithProjectsResponseDTO>> GetAllWithProjectsAsync();
+    Task<IEnumerable<EmployeeWithSalaryResponseDTO>> GetEmployeesBySalaryAndJoinedDateAsync(decimal minSalary, DateOnly minJoinedDate);
 }
